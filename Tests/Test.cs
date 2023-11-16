@@ -3,14 +3,18 @@ namespace MinesweeperHack.Tests;
 using Xunit;
 
 public class TestClass {
-    
+
     [Theory]
-    [InlineData(5, 20)]
-    [InlineData(10, 20)]
-    [InlineData(0, 0)]
-    [InlineData(1, 1)]
-    public void MinesweeperBoardConstructor(int width, int height) {
-        var board = new MinesweeperBoard(width, height);
-        Assert.True(board.TileData.Length == width * height && board.TileData.All(i => i == -2));
-    }
+    [InlineData(new int[] {
+        -2, -2, -2,
+        -2, 1, -2,
+        -2, -2, -2
+        }, 
+        3, 3, 
+        1, 1
+    )]
+    public void AdjacentUnknownTilesTest(int[] tileData, int boardWidth, int boardHeight, int testX, int testY) {
+        var board = new MinesweeperBoard(tileData, boardWidth, boardHeight);
+        Assert.True(board.AdjacentUnknownTiles(testX, testY).Length == 8);
+    }   
 }
