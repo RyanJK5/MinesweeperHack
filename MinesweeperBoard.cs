@@ -49,7 +49,7 @@ public class MinesweeperBoard {
         }
     }
 
-    public (int x, int y)[] AdjacentUnknownTiles(int tileX, int tileY) {
+    public (int x, int y)[] AdjacentTilesOfType(int tileX, int tileY, int tileType) {
         var result = new List<(int, int)>();
         
         int startX = tileX - 1;
@@ -64,7 +64,7 @@ public class MinesweeperBoard {
                 if (x == tileX && y == tileY) {
                     continue;
                 }
-                if (TileData[y,x] == UnknownTile) {
+                if (TileData[y,x] == tileType) {
                     result.Add((x, y));
                 }
             }
