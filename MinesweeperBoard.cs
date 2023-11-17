@@ -11,6 +11,11 @@ public class MinesweeperBoard {
 
     public int[,] TileData;
 
+    public int Width { get => TileData.Length; }
+
+    public int Height { get => TileData.GetLength(1); }
+
+
     public MinesweeperBoard(int width, int height) {
         TileData = new int[width, height];
         for (var y = 0; y < height; y++) {
@@ -36,7 +41,7 @@ public class MinesweeperBoard {
             }
         }
 
-        TileData = new int[width, height];
+        TileData = new int[height, width];
         for (var y = 0; y < height; y++) {
             for (var x = 0; x < width; x++) {
                 TileData[y,x] = tileData[width * y + x];
@@ -46,13 +51,39 @@ public class MinesweeperBoard {
 
     public (int x, int y)[] AdjacentUnknownTiles(int tileX, int tileY) {
         var result = new List<(int, int)>();
-        for (var y = tileY - 1; y <= tileY + 1; y++) {
-            for (var x = tileX - 1; x <= tileX + 1; x++) {
+        
+        int startX = tileX - 1;
+        int startY = tileY - 1;
+        int endX = tileX + 1;
+        int endY = tileY + 1;
+        MoveInBounds(ref startX, ref startY);
+        MoveInBounds(ref endX, ref endY);
+        
+        for (var y = startY; y <= endY; y++) {
+            for (var x = startX; x <= endX; x++) {
+                if (x == tileX && y == tileY) {
+                    continue;
+                }
                 if (TileData[y,x] == UnknownTile) {
                     result.Add((x, y));
                 }
             }
         }
         return result.ToArray();
+    }
+
+    public void MoveInBounds(ref int x, ref int y) {
+        if (x >= Width) {
+            x = Width - 1;
+        }
+        else if (x < 0) {
+            x = 0;
+        }
+        if (y >= Height) {
+            y = Height - 1;
+        }
+        else if (y < 0) {
+            y = 0;
+        }
     }
 }
