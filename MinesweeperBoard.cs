@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using Xunit.Sdk;
 
 namespace MinesweeperHack;
 
@@ -11,9 +12,9 @@ public class MinesweeperBoard {
 
     public int[,] TileData;
 
-    public int Width { get => TileData.Length; }
+    public int Width { get => TileData.GetLength(1); }
 
-    public int Height { get => TileData.GetLength(1); }
+    public int Height { get => TileData.GetLength(0); }
 
 
     public MinesweeperBoard(int width, int height) {
@@ -86,4 +87,20 @@ public class MinesweeperBoard {
             y = 0;
         }
     }
+
+    public override bool Equals(object? obj) {
+        if (obj is not MinesweeperBoard board || board.Width != Width || board.Height != Height) {
+            return false;
+        }
+        for (var y = 0; y < board.Height; y++) {
+            for (var x = 0; x < board.Width; x++) {
+                if (board.TileData[y,x] != TileData[y,x]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public override int GetHashCode() => HashCode.Combine(TileData);
 }
